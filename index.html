@@ -400,6 +400,174 @@
   @media (prefers-reduced-motion: reduce){
     *{animation-duration:.01ms !important;transition-duration:.01ms !important;}
   }
+
+  /* ---------- AI ASSISTANT NAV BUTTON ---------- */
+  .nav-ai-btn{
+    display:inline-flex;align-items:center;gap:7px;
+    font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#fff;
+    background:linear-gradient(105deg,var(--accent),var(--violet));
+    padding:9px 16px;border-radius:100px;border:none;cursor:pointer;
+    box-shadow:0 4px 14px -4px color-mix(in srgb, var(--accent) 55%, transparent);
+    transition:transform .25s var(--ease), box-shadow .25s var(--ease);
+    white-space:nowrap;
+  }
+  .nav-ai-btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px -4px color-mix(in srgb, var(--accent) 65%, transparent);}
+  .nav-ai-btn svg{width:15px;height:15px;flex-shrink:0;}
+  .nav-ai-btn .spark{width:6px;height:6px;border-radius:50%;background:#fff;position:relative;flex-shrink:0;}
+  .nav-ai-btn .spark::after{content:"";position:absolute;inset:-3px;border-radius:50%;background:#fff;opacity:.55;animation:ping 2s ease-out infinite;}
+  .mobile-menu .nav-ai-btn{
+    font-size:16px;padding:13px 20px;justify-content:center;margin-top:6px;width:100%;
+  }
+  @media (max-width:480px){
+    .nav-ai-btn{padding:9px 11px;}
+    .nav-ai-btn .nav-ai-label{display:none;}
+  }
+
+  /* ---------- AI ASSISTANT CHAT MODAL ---------- */
+  .chat-overlay{
+    position:fixed;inset:0;z-index:300;
+    background:rgba(8,11,20,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+    display:flex;align-items:center;justify-content:center;padding:24px;
+    opacity:0;visibility:hidden;transition:opacity .3s var(--ease), visibility 0s linear .3s;
+  }
+  .chat-overlay.open{opacity:1;visibility:visible;transition:opacity .3s var(--ease), visibility 0s;}
+  .chat-modal{
+    width:100%;max-width:760px;height:min(720px,86vh);
+    background:var(--bg-elevated);border:1px solid var(--line);border-radius:20px;
+    box-shadow:0 30px 70px rgba(0,0,0,.4);
+    display:flex;flex-direction:column;overflow:hidden;
+    transform:translateY(18px) scale(.98);opacity:0;
+    transition:transform .35s var(--ease), opacity .35s var(--ease);
+  }
+  .chat-overlay.open .chat-modal{transform:translateY(0) scale(1);opacity:1;}
+  .chat-header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 18px;border-bottom:1px solid var(--line);flex-shrink:0;
+  }
+  .chat-header-left{display:flex;align-items:center;gap:12px;min-width:0;}
+  .chat-avatar{
+    width:38px;height:38px;border-radius:11px;flex-shrink:0;
+    background:linear-gradient(135deg,var(--accent),var(--violet));
+    display:flex;align-items:center;justify-content:center;color:#fff;
+  }
+  .chat-avatar svg{width:19px;height:19px;}
+  .chat-title-block{min-width:0;}
+  .chat-title-block .ct-name{font-family:'Sora',sans-serif;font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .chat-title-block .ct-status{font-size:12px;color:var(--text-faint);display:flex;align-items:center;gap:6px;margin-top:2px;}
+  .chat-title-block .dot-live{width:6px;height:6px;border-radius:50%;background:#22c55e;position:relative;flex-shrink:0;}
+  .chat-title-block .dot-live::after{content:"";position:absolute;inset:-3px;border-radius:50%;background:#22c55e;opacity:.5;animation:ping 2s infinite;}
+  .chat-close{
+    width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:var(--bg);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;flex-shrink:0;color:var(--text-dim);
+  }
+  .chat-close:hover{border-color:var(--accent);color:var(--accent);}
+  .chat-close svg{width:16px;height:16px;stroke:currentColor;}
+
+  .chat-body{flex:1;overflow-y:auto;padding:22px 20px;display:flex;flex-direction:column;gap:16px;}
+  .chat-body::-webkit-scrollbar{width:7px;}
+  .chat-body::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px;}
+
+  .chat-msg{display:flex;gap:10px;max-width:88%;align-items:flex-start;}
+  .chat-msg.user{align-self:flex-end;flex-direction:row-reverse;}
+  .chat-msg .m-avatar{
+    width:26px;height:26px;border-radius:8px;flex-shrink:0;margin-top:2px;
+    display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;font-family:'Sora',sans-serif;
+  }
+  .chat-msg.bot .m-avatar{background:linear-gradient(135deg,var(--accent),var(--violet));color:#fff;}
+  .chat-msg.user .m-avatar{background:var(--accent-soft);color:var(--accent);}
+  .chat-msg .m-bubble{padding:11px 15px;border-radius:14px;font-size:14.5px;line-height:1.65;}
+  .chat-msg .m-bubble p{margin-bottom:8px;}
+  .chat-msg .m-bubble p:last-child{margin-bottom:0;}
+  .chat-msg .m-bubble ul{margin:6px 0 8px 2px;}
+  .chat-msg .m-bubble li{position:relative;padding-left:14px;margin-bottom:4px;}
+  .chat-msg .m-bubble li::before{content:"";position:absolute;left:0;top:9px;width:4px;height:4px;border-radius:50%;background:currentColor;opacity:.6;}
+  .chat-msg.bot .m-bubble{background:var(--bg);border:1px solid var(--line);border-top-left-radius:4px;color:var(--text);}
+  .chat-msg.user .m-bubble{background:linear-gradient(105deg,var(--accent),var(--violet));color:#fff;border-top-right-radius:4px;}
+  .chat-msg.bot .m-bubble a{color:var(--accent);text-decoration:underline;}
+  .chat-msg.user .m-bubble a{color:#fff;text-decoration:underline;}
+
+  .typing-msg .m-bubble{display:flex;align-items:center;}
+  .typing-dots{display:flex;gap:4px;padding:2px 2px;}
+  .typing-dots span{width:6px;height:6px;border-radius:50%;background:var(--text-faint);animation:tblink 1.2s infinite ease-in-out;}
+  .typing-dots span:nth-child(2){animation-delay:.2s;}
+  .typing-dots span:nth-child(3){animation-delay:.4s;}
+  @keyframes tblink{0%,80%,100%{opacity:.3;transform:scale(.8);}40%{opacity:1;transform:scale(1);}}
+
+  .chat-suggestions{display:flex;flex-wrap:wrap;gap:8px;padding:2px 20px 16px;flex-shrink:0;}
+  .chat-chip{
+    font-family:'Inter',sans-serif;font-size:12.5px;padding:8px 13px;border-radius:100px;
+    border:1px solid var(--line);background:var(--bg);color:var(--text-dim);cursor:pointer;transition:all .2s;
+  }
+  .chat-chip:hover{border-color:var(--accent);color:var(--accent);}
+
+  .chat-footer{padding:12px 16px 16px;border-top:1px solid var(--line);flex-shrink:0;}
+  .chat-input-row{
+    display:flex;align-items:flex-end;gap:8px;
+    background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:8px 8px 8px 16px;
+    transition:border-color .2s;
+  }
+  .chat-input-row:focus-within{border-color:var(--accent);}
+  .chat-input-row textarea{
+    flex:1;border:none;background:transparent;resize:none;outline:none;
+    font-family:'Inter',sans-serif;font-size:14.5px;color:var(--text);max-height:120px;line-height:1.5;padding:6px 0;
+  }
+  .chat-input-row textarea::placeholder{color:var(--text-faint);}
+  .chat-send{
+    width:34px;height:34px;border-radius:10px;border:none;flex-shrink:0;
+    background:linear-gradient(105deg,var(--accent),var(--violet));color:#fff;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;
+  }
+  .chat-send:disabled{opacity:.35;cursor:not-allowed;}
+  .chat-send:not(:disabled):hover{transform:translateY(-1px);}
+  .chat-send svg{width:15px;height:15px;}
+
+  .chat-mic{
+    width:34px;height:34px;border-radius:10px;border:1px solid var(--line);flex-shrink:0;
+    background:var(--bg-elevated);color:var(--text-dim);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    transition:all .2s var(--ease);position:relative;
+  }
+  .chat-mic:hover{border-color:var(--accent);color:var(--accent);}
+  .chat-mic svg{width:16px;height:16px;}
+  .chat-mic.unsupported{opacity:.4;cursor:not-allowed;}
+  .chat-mic.recording{
+    background:linear-gradient(105deg,#ef4444,#f97316);border-color:transparent;color:#fff;
+    animation:micPulse 1.4s ease-in-out infinite;
+  }
+  @keyframes micPulse{
+    0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.45);}
+    50%{box-shadow:0 0 0 8px rgba(239,68,68,0);}
+  }
+  .chat-lang-select{
+    height:34px;flex-shrink:0;border-radius:10px;border:1px solid var(--line);
+    background:var(--bg-elevated);color:var(--text-dim);font-family:'Inter',sans-serif;
+    font-size:12px;font-weight:600;padding:0 6px;cursor:pointer;outline:none;transition:border-color .2s;
+  }
+  .chat-lang-select:hover, .chat-lang-select:focus{border-color:var(--accent);color:var(--accent);}
+  .chat-listening{
+    display:none;align-items:center;gap:8px;padding:0 20px 8px;
+    font-size:12px;color:var(--accent);font-family:'Inter',sans-serif;
+  }
+  .chat-listening.show{display:flex;}
+  .chat-listening .wave{display:flex;align-items:center;gap:2px;height:14px;}
+  .chat-listening .wave span{
+    width:3px;border-radius:2px;background:var(--accent);
+    animation:waveBar .9s ease-in-out infinite;
+  }
+  .chat-listening .wave span:nth-child(1){height:6px;animation-delay:0s;}
+  .chat-listening .wave span:nth-child(2){height:14px;animation-delay:.15s;}
+  .chat-listening .wave span:nth-child(3){height:9px;animation-delay:.3s;}
+  .chat-listening .wave span:nth-child(4){height:14px;animation-delay:.45s;}
+  .chat-listening .wave span:nth-child(5){height:6px;animation-delay:.6s;}
+  @keyframes waveBar{0%,100%{transform:scaleY(.5);}50%{transform:scaleY(1);}}
+  .chat-disclaimer{font-size:11px;color:var(--text-faint);text-align:center;margin-top:10px;}
+
+  body.chat-lock{overflow:hidden;}
+
+  @media (max-width:640px){
+    .chat-overlay{padding:0;}
+    .chat-modal{max-width:100%;height:100%;height:100dvh;border-radius:0;}
+  }
 </style>
 </head>
 <body>
@@ -416,6 +584,11 @@
       <a href="#contact">Contact</a>
     </nav>
     <div class="nav-right">
+      <button class="nav-ai-btn" id="aiAssistantBtn" type="button">
+        <span class="spark"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v1a3 3 0 0 1-2 2.83V17a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3v-3.17A3 3 0 0 1 4 11v-1a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"></path><circle cx="9" cy="12" r="1"></circle><circle cx="15" cy="12" r="1"></circle></svg>
+        <span class="nav-ai-label">AI Assistant</span>
+      </button>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
         <svg id="iconSun" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
         <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
@@ -432,6 +605,64 @@
     <a href="#contact">Contact</a>
   </div>
 </header>
+
+<!-- ===== AI ASSISTANT CHAT MODAL ===== -->
+<div class="chat-overlay" id="chatOverlay" aria-hidden="true">
+  <div class="chat-modal" role="dialog" aria-modal="true" aria-label="Abhijith's AI Assistant chat">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="chat-avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v1a3 3 0 0 1-2 2.83V17a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3v-3.17A3 3 0 0 1 4 11v-1a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"></path><circle cx="9" cy="12" r="1"></circle><circle cx="15" cy="12" r="1"></circle></svg>
+        </div>
+        <div class="chat-title-block">
+          <div class="ct-name">Abhijith's AI Assistant</div>
+          <div class="ct-status"><span class="dot-live"></span>Ask about his background, skills &amp; projects</div>
+        </div>
+      </div>
+      <button class="chat-close" id="chatClose" aria-label="Close chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+      </button>
+    </div>
+
+    <div class="chat-body" id="chatBody">
+      <div class="chat-msg bot">
+        <div class="m-avatar">AI</div>
+        <div class="m-bubble">
+          <p>Hi 👋 I'm Abhijith's AI assistant. Ask me anything about his background, skills, projects, or how to get in touch — I'll answer using what's on this portfolio.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-suggestions" id="chatSuggestions">
+      <button class="chat-chip" type="button" data-q="Tell me about your background">👤 His background</button>
+      <button class="chat-chip" type="button" data-q="What projects has he built?">💼 His projects</button>
+      <button class="chat-chip" type="button" data-q="What are his top skills?">🛠️ His skills</button>
+      <button class="chat-chip" type="button" data-q="How can I contact him?">✉️ Contact info</button>
+    </div>
+
+    <div class="chat-footer">
+      <div class="chat-listening" id="chatListening">
+        <span class="wave"><span></span><span></span><span></span><span></span><span></span></span>
+        <span id="chatListeningText">Listening…</span>
+      </div>
+      <div class="chat-input-row">
+        <select class="chat-lang-select" id="chatLangSelect" aria-label="Voice input language" title="Voice input language">
+          <option value="en-US">EN</option>
+          <option value="hi-IN">HI</option>
+          <option value="te-IN">TE</option>
+        </select>
+        <button class="chat-mic" id="chatMic" type="button" aria-label="Record voice message" title="Speak your question">
+          <svg id="micIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"></path><path d="M19 10v1a7 7 0 0 1-14 0v-1"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+        </button>
+        <textarea id="chatInput" rows="1" placeholder="Message AI Assistant…" aria-label="Type your message"></textarea>
+        <button class="chat-send" id="chatSend" aria-label="Send message" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path></svg>
+        </button>
+      </div>
+      <div class="chat-disclaimer">Demo assistant — answers come from a small local knowledge base (RAG-powered backend coming soon) · 🎙️ Voice input supports English, Hindi &amp; Telugu</div>
+    </div>
+  </div>
+</div>
 
 <section class="hero" id="home">
   <div class="hero-mesh"></div>
@@ -716,6 +947,288 @@
       }
     });
   });
+
+  // =========================================================
+  // ---- AI ASSISTANT CHATBOT ----
+  // This is a lightweight, front-end-only demo. It answers using
+  // a small local "knowledge base" object built from this page's
+  // own content, matched with simple keyword rules.
+  //
+  // TO CONNECT A REAL RAG BACKEND LATER:
+  // Replace the body of `getBotReply(query)` with a fetch() call
+  // to your backend, e.g.:
+  //
+  //   async function getBotReply(query) {
+  //     const res = await fetch('https://your-rag-api.com/chat', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ message: query })
+  //     });
+  //     const data = await res.json();
+  //     return data.answer; // string (HTML or plain text)
+  //   }
+  //
+  // Your backend would embed this portfolio's content (about,
+  // resume, GitHub repo READMEs, etc.) into a vector store, retrieve
+  // the most relevant chunks for each query, and pass them to an
+  // LLM to generate a grounded answer — classic RAG.
+  // =========================================================
+
+  const knowledgeBase = {
+    name: "Sai Abhijith Reddy Chinthakuntla",
+    about: "I'm a Computer Science graduate and aspiring Data Scientist with a strong interest in turning data into meaningful insights and practical solutions. I enjoy working with Python, SQL, data analytics, machine learning, and data visualization. I'm currently pursuing a Data Analytics & Data Science course at Imarticus Learning, Hyderabad.",
+    skills: ["Python", "SQL", "Machine Learning", "Data Analytics", "Data Visualization", "JavaScript", "Java", "Statistics", "Git & GitHub", "Excel / Power BI"],
+    education: "Bachelor of Technology in Computer Science & Engineering from CVR College of Engineering, Hyderabad.",
+    currentProgram: "Data Analytics & Data Science program at Imarticus Learning, Hyderabad — covering statistics, Python for data science, SQL, machine learning, and business analytics.",
+    location: "Hyderabad, Telangana, India",
+    status: "Open to Data Analyst / Data Science roles",
+    email: "abhijithreddychinthakuntla@gmail.com",
+    linkedin: "https://www.linkedin.com/in/abhijithreddych",
+    github: "https://github.com/AbhijithReddie"
+  };
+
+  function escapeHTML(str){
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  function getBotReply(rawQuery){
+    const q = rawQuery.toLowerCase();
+
+    if (/\b(hi|hello|hey|sup)\b/.test(q) && q.length < 20) {
+      return `<p>Hey there 👋 I'm here to answer questions about ${knowledgeBase.name.split(' ')[0]}'s background, skills, and projects. What would you like to know?</p>`;
+    }
+    if (/(project|built|repo|github|portfolio work|worked on)/.test(q)) {
+      const items = projects.map(p => `<li><strong>${p.name}</strong> — ${p.desc} (${p.lang}) — <a href="${p.url}" target="_blank" rel="noopener">view on GitHub</a></li>`).join('');
+      return `<p>Here are a few of his recent projects, all on GitHub:</p><ul>${items}</ul><p>Want more detail on any one of these?</p>`;
+    }
+    if (/(skill|tech stack|technolog|tools|stack|proficien)/.test(q)) {
+      return `<p>His core toolkit includes:</p><ul>${knowledgeBase.skills.map(s => `<li>${s}</li>`).join('')}</ul><p>He's strongest in Python, SQL, and data analytics/visualization.</p>`;
+    }
+    if (/(about|background|who (is|are)|yourself|bio)/.test(q)) {
+      return `<p>${knowledgeBase.about}</p>`;
+    }
+    if (/(education|degree|college|university|study|studied|school)/.test(q)) {
+      return `<p>${knowledgeBase.education}</p><p>He's also currently pursuing the ${knowledgeBase.currentProgram}</p>`;
+    }
+    if (/(experience|journey|career|worked|work history|internship)/.test(q)) {
+      return `<p>He's fresh out of college and building his career in data. He's currently doing the ${knowledgeBase.currentProgram} His B.Tech gave him a strong foundation in programming, data structures, databases, and software engineering.</p>`;
+    }
+    if (/(contact|email|reach|hire|linkedin|connect|get in touch)/.test(q)) {
+      return `<p>You can reach him at <a href="mailto:${knowledgeBase.email}">${knowledgeBase.email}</a>, connect on <a href="${knowledgeBase.linkedin}" target="_blank" rel="noopener">LinkedIn</a>, or check out his work on <a href="${knowledgeBase.github}" target="_blank" rel="noopener">GitHub</a>.</p>`;
+    }
+    if (/(available|open to work|hiring|status|looking for|opportunit|job)/.test(q)) {
+      return `<p>${knowledgeBase.status}. He's based in ${knowledgeBase.location} and open to remote or on-site roles in data analytics/data science.</p>`;
+    }
+    if (/(location|based|live|city|where)/.test(q)) {
+      return `<p>He's based in ${knowledgeBase.location}.</p>`;
+    }
+    if (/(resume|cv)/.test(q)) {
+      return `<p>There isn't a downloadable résumé linked on this page yet, but everything on it — background, skills, projects, and education — reflects his current résumé. Feel free to ask me about any of it, or reach out directly at <a href="mailto:${knowledgeBase.email}">${knowledgeBase.email}</a>.</p>`;
+    }
+    if (/(thank|thanks|cool|great|nice|awesome)/.test(q)) {
+      return `<p>You're welcome! Let me know if you'd like to know more about his projects, skills, or how to get in touch.</p>`;
+    }
+
+    return `<p>I don't have a specific answer for that yet — I'm currently a demo running on a small local knowledge base. Feel free to ask about his <strong>background</strong>, <strong>skills</strong>, <strong>projects</strong>, <strong>education</strong>, or <strong>contact info</strong>.</p>`;
+  }
+
+  const chatOverlay = document.getElementById('chatOverlay');
+  const chatBody = document.getElementById('chatBody');
+  const chatInput = document.getElementById('chatInput');
+  const chatSend = document.getElementById('chatSend');
+  const chatClose = document.getElementById('chatClose');
+  const chatSuggestions = document.getElementById('chatSuggestions');
+  let chatOpened = false;
+
+  function openChat(){
+    chatOverlay.classList.add('open');
+    chatOverlay.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('chat-lock');
+    if (!chatOpened) { chatOpened = true; }
+    setTimeout(() => chatInput.focus(), 300);
+  }
+  function closeChat(){
+    chatOverlay.classList.remove('open');
+    chatOverlay.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('chat-lock');
+    if (typeof window.stopRecording === 'function') window.stopRecording();
+  }
+
+  document.getElementById('aiAssistantBtn').addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    openChat();
+  });
+  chatClose.addEventListener('click', closeChat);
+  chatOverlay.addEventListener('click', (e) => { if (e.target === chatOverlay) closeChat(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && chatOverlay.classList.contains('open')) closeChat(); });
+
+  function addMessage(role, html){
+    const wrap = document.createElement('div');
+    wrap.className = `chat-msg ${role}`;
+    wrap.innerHTML = `
+      <div class="m-avatar">${role === 'bot' ? 'AI' : 'You'}</div>
+      <div class="m-bubble">${html}</div>
+    `;
+    chatBody.appendChild(wrap);
+    chatBody.scrollTop = chatBody.scrollHeight;
+    return wrap;
+  }
+
+  function showTyping(){
+    const wrap = document.createElement('div');
+    wrap.className = 'chat-msg bot typing-msg';
+    wrap.innerHTML = `
+      <div class="m-avatar">AI</div>
+      <div class="m-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>
+    `;
+    chatBody.appendChild(wrap);
+    chatBody.scrollTop = chatBody.scrollHeight;
+    return wrap;
+  }
+
+  function sendMessage(text){
+    const trimmed = text.trim();
+    if (!trimmed) return;
+    if (typeof window.stopRecording === 'function') window.stopRecording();
+    addMessage('user', escapeHTML(trimmed));
+    chatInput.value = '';
+    chatInput.style.height = 'auto';
+    chatSend.disabled = true;
+    if (chatSuggestions) chatSuggestions.style.display = 'none';
+
+    const typingEl = showTyping();
+    const delay = 500 + Math.random() * 500;
+    setTimeout(() => {
+      typingEl.remove();
+      addMessage('bot', getBotReply(trimmed));
+    }, delay);
+  }
+
+  chatInput.addEventListener('input', () => {
+    chatSend.disabled = chatInput.value.trim().length === 0;
+    chatInput.style.height = 'auto';
+    chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+  });
+  chatInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      if (!chatSend.disabled) sendMessage(chatInput.value);
+    }
+  });
+  chatSend.addEventListener('click', () => sendMessage(chatInput.value));
+  chatSuggestions.querySelectorAll('.chat-chip').forEach(chip => {
+    chip.addEventListener('click', () => sendMessage(chip.dataset.q));
+  });
+
+  // =========================================================
+  // ---- VOICE INPUT (speech-to-text) ----
+  // Uses the browser's built-in Web Speech API (SpeechRecognition).
+  // Supports English, Hindi, and Telugu — switch language with the
+  // small "EN / HI / TE" dropdown next to the mic button.
+  // Works in Chrome / Edge / most Chromium browsers. Safari/Firefox
+  // have limited or no support, so we detect that and disable
+  // the button gracefully instead of breaking.
+  // =========================================================
+  const chatMic = document.getElementById('chatMic');
+  const chatLangSelect = document.getElementById('chatLangSelect');
+  const chatListening = document.getElementById('chatListening');
+  const chatListeningText = document.getElementById('chatListeningText');
+
+  const langNames = { 'en-US': 'English', 'hi-IN': 'Hindi', 'te-IN': 'Telugu' };
+  const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognition = null;
+  let isRecording = false;
+  let baseTextBeforeRecording = '';
+
+  function refreshInputState(){
+    chatSend.disabled = chatInput.value.trim().length === 0;
+    chatInput.style.height = 'auto';
+    chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+  }
+
+  if (!SpeechRecognitionAPI) {
+    chatMic.classList.add('unsupported');
+    chatMic.disabled = true;
+    chatMic.title = 'Voice input isn\'t supported in this browser — try Chrome or Edge';
+  } else {
+    recognition = new SpeechRecognitionAPI();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = chatLangSelect.value;
+
+    chatLangSelect.addEventListener('change', () => {
+      recognition.lang = chatLangSelect.value;
+      if (isRecording) stopRecording();
+    });
+
+    recognition.onresult = (event) => {
+      let interim = '';
+      let final = '';
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          final += transcript;
+        } else {
+          interim += transcript;
+        }
+      }
+      const separator = baseTextBeforeRecording && !/\s$/.test(baseTextBeforeRecording) ? ' ' : '';
+      if (final) {
+        baseTextBeforeRecording = (baseTextBeforeRecording + separator + final).trim() + ' ';
+        chatInput.value = baseTextBeforeRecording;
+      } else {
+        chatInput.value = (baseTextBeforeRecording + separator + interim);
+      }
+      refreshInputState();
+    };
+
+    recognition.onerror = (event) => {
+      if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+        chatListeningText.textContent = 'Microphone access denied';
+        setTimeout(stopRecording, 1200);
+      } else if (event.error === 'no-speech') {
+        // keep listening quietly; browsers sometimes fire this mid-pause
+      } else {
+        stopRecording();
+      }
+    };
+
+    recognition.onend = () => {
+      if (isRecording) {
+        // Auto-restart if it stopped on its own while user was still recording
+        try { recognition.start(); } catch (e) { stopRecording(); }
+      }
+    };
+
+    function startRecording(){
+      baseTextBeforeRecording = chatInput.value ? chatInput.value.trim() + ' ' : '';
+      isRecording = true;
+      chatMic.classList.add('recording');
+      chatListening.classList.add('show');
+      chatListeningText.textContent = `Listening in ${langNames[chatLangSelect.value] || 'English'}…`;
+      try { recognition.start(); } catch (e) { /* already started */ }
+    }
+
+    function stopRecording(){
+      isRecording = false;
+      chatMic.classList.remove('recording');
+      chatListening.classList.remove('show');
+      try { recognition.stop(); } catch (e) { /* not started */ }
+      refreshInputState();
+      chatInput.focus();
+    }
+    window.stopRecording = stopRecording;
+
+    chatMic.addEventListener('click', () => {
+      if (isRecording) {
+        stopRecording();
+      } else {
+        startRecording();
+      }
+    });
+  }
 </script>
 </body>
 </html>
