@@ -659,7 +659,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path></svg>
         </button>
       </div>
-      <div class="chat-disclaimer">Demo assistant — answers come from a small local knowledge base (RAG-powered backend coming soon) · 🎙️ Voice input supports English, Hindi &amp; Telugu</div>
+      <div class="chat-disclaimer">Powered by RAG over his GitHub projects, résumé &amp; portfolio · 🎙️ Voice input supports English, Hindi &amp; Telugu</div>
     </div>
   </div>
 </div>
@@ -904,9 +904,10 @@
 
   // ---- Projects (GitHub repos for AbhijithReddie) ----
   const projects = [
-    {name:"Social Media Analytics", desc:"Analyzed social media engagement data to uncover audience behavior patterns and content performance trends using Python and data visualization.", lang:"Python · EDA", url:"https://github.com/AbhijithReddie/Social-Media-Analytics", clr:"accent", soft:"accent-soft"},
-    {name:"Sales Analytics Dashboard", desc:"Built an interactive dashboard analyzing sales performance across regions and products, surfacing KPIs and trends to support data-driven decisions.", lang:"Python · Power BI", url:"https://github.com/AbhijithReddie/Sales-Analytics-Dashboard", clr:"teal", soft:"teal-soft"},
-    {name:"Accident Analysis", desc:"Explored road accident datasets to identify high-risk patterns by location, time and conditions, applying statistical analysis and visualization for insights.", lang:"Python · Pandas", url:"https://github.com/AbhijithReddie/Accident-Analysis", clr:"violet", soft:"violet-soft"}
+    {name:"AI-Powered Portfolio Assistant", desc:"A RAG-based chatbot embedded right on this site — retrieves context from his GitHub repos, résumé, and portfolio content, then uses an LLM to answer visitor questions. Includes multilingual (English/Hindi/Telugu) voice input.", lang:"Python · FastAPI · RAG · OpenAI", url:"https://github.com/AbhijithReddie", clr:"accent", soft:"accent-soft"},
+    {name:"Social Media Analytics", desc:"Analyzed social media engagement data to uncover audience behavior patterns and content performance trends using Python and data visualization.", lang:"Python · EDA", url:"https://github.com/AbhijithReddie/Social-Media-Analytics", clr:"teal", soft:"teal-soft"},
+    {name:"Sales Analytics Dashboard", desc:"Built an interactive dashboard analyzing sales performance across regions and products, surfacing KPIs and trends to support data-driven decisions.", lang:"Python · Power BI", url:"https://github.com/AbhijithReddie/Sales-Analytics-Dashboard", clr:"violet", soft:"violet-soft"},
+    {name:"Accident Analysis", desc:"Explored road accident datasets to identify high-risk patterns by location, time and conditions, applying statistical analysis and visualization for insights.", lang:"Python · Pandas", url:"https://github.com/AbhijithReddie/Accident-Analysis", clr:"accent", soft:"accent-soft"}
   ];
   const grid = document.getElementById('projGrid');
   grid.innerHTML = projects.map((p,i) => `
@@ -950,30 +951,18 @@
 
   // =========================================================
   // ---- AI ASSISTANT CHATBOT ----
-  // This is a lightweight, front-end-only demo. It answers using
-  // a small local "knowledge base" object built from this page's
-  // own content, matched with simple keyword rules.
+  // Calls a real RAG backend (FastAPI + ChromaDB + OpenAI) that embeds
+  // this portfolio's content, GitHub repos, and any uploaded documents,
+  // retrieves the most relevant chunks per question, and asks GPT-4o-mini
+  // to answer grounded in that context.
   //
-  // TO CONNECT A REAL RAG BACKEND LATER:
-  // Replace the body of `getBotReply(query)` with a fetch() call
-  // to your backend, e.g.:
-  //
-  //   async function getBotReply(query) {
-  //     const res = await fetch('https://your-rag-api.com/chat', {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({ message: query })
-  //     });
-  //     const data = await res.json();
-  //     return data.answer; // string (HTML or plain text)
-  //   }
-  //
-  // Your backend would embed this portfolio's content (about,
-  // resume, GitHub repo READMEs, etc.) into a vector store, retrieve
-  // the most relevant chunks for each query, and pass them to an
-  // LLM to generate a grounded answer — classic RAG.
-  // =========================================================
+  // >>> UPDATE THIS after you deploy the backend (see rag-backend/README.md) <<<
+  const BACKEND_URL = "https://your-backend-url.onrender.com/api/chat";
 
+  // If the backend is unreachable (not deployed yet, cold-starting on
+  // Render's free tier, or a network hiccup), we fall back to this small
+  // local knowledge base so the widget still gives a reasonable answer
+  // instead of just failing.
   const knowledgeBase = {
     name: "Sai Abhijith Reddy Chinthakuntla",
     about: "I'm a Computer Science graduate and aspiring Data Scientist with a strong interest in turning data into meaningful insights and practical solutions. I enjoy working with Python, SQL, data analytics, machine learning, and data visualization. I'm currently pursuing a Data Analytics & Data Science course at Imarticus Learning, Hyderabad.",
@@ -993,7 +982,7 @@
     return d.innerHTML;
   }
 
-  function getBotReply(rawQuery){
+  function getLocalFallbackReply(rawQuery){
     const q = rawQuery.toLowerCase();
 
     if (/\b(hi|hello|hey|sup)\b/.test(q) && q.length < 20) {
@@ -1031,7 +1020,39 @@
       return `<p>You're welcome! Let me know if you'd like to know more about his projects, skills, or how to get in touch.</p>`;
     }
 
-    return `<p>I don't have a specific answer for that yet — I'm currently a demo running on a small local knowledge base. Feel free to ask about his <strong>background</strong>, <strong>skills</strong>, <strong>projects</strong>, <strong>education</strong>, or <strong>contact info</strong>.</p>`;
+    return `<p>I don't have a specific answer for that yet. Feel free to ask about his <strong>background</strong>, <strong>skills</strong>, <strong>projects</strong>, <strong>education</strong>, or <strong>contact info</strong>.</p>`;
+  }
+
+  // Renders plain-text answers from the backend as simple HTML paragraphs
+  // (splits on blank lines; turns "- " lines into a bullet list).
+  function formatPlainTextReply(text){
+    const blocks = text.trim().split(/\n\s*\n/);
+    return blocks.map(block => {
+      const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
+      const isList = lines.length > 1 && lines.every(l => /^[-*•]\s+/.test(l));
+      if (isList) {
+        return `<ul>${lines.map(l => `<li>${escapeHTML(l.replace(/^[-*•]\s+/, ''))}</li>`).join('')}</ul>`;
+      }
+      return `<p>${escapeHTML(block.replace(/\n/g, ' '))}</p>`;
+    }).join('');
+  }
+
+  async function getBotReply(rawQuery){
+    try {
+      const res = await fetch(BACKEND_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: rawQuery }),
+      });
+      if (!res.ok) throw new Error(`Backend returned ${res.status}`);
+      const data = await res.json();
+      if (!data.reply) throw new Error('Empty reply from backend');
+      return formatPlainTextReply(data.reply);
+    } catch (err) {
+      console.warn('RAG backend unavailable, using local fallback:', err.message);
+      const fallback = getLocalFallbackReply(rawQuery);
+      return `${fallback}<p style="font-size:11.5px;opacity:.55;margin-top:6px;">⚠️ Offline demo answer — the live AI backend isn't reachable right now.</p>`;
+    }
   }
 
   const chatOverlay = document.getElementById('chatOverlay');
@@ -1088,7 +1109,7 @@
     return wrap;
   }
 
-  function sendMessage(text){
+  async function sendMessage(text){
     const trimmed = text.trim();
     if (!trimmed) return;
     if (typeof window.stopRecording === 'function') window.stopRecording();
@@ -1099,11 +1120,10 @@
     if (chatSuggestions) chatSuggestions.style.display = 'none';
 
     const typingEl = showTyping();
-    const delay = 500 + Math.random() * 500;
-    setTimeout(() => {
-      typingEl.remove();
-      addMessage('bot', getBotReply(trimmed));
-    }, delay);
+    const minDelay = new Promise(resolve => setTimeout(resolve, 500));
+    const [replyHTML] = await Promise.all([getBotReply(trimmed), minDelay]);
+    typingEl.remove();
+    addMessage('bot', replyHTML);
   }
 
   chatInput.addEventListener('input', () => {
